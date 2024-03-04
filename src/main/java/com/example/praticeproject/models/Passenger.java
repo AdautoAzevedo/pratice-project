@@ -3,6 +3,8 @@ package com.example.praticeproject.models;
 import java.io.Serializable;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,7 +25,7 @@ public class Passenger implements Serializable{
 
     private String name;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "passengers")
     private Set<Flight> flights;
     
 }

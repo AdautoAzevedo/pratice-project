@@ -1,4 +1,6 @@
 package com.example.praticeproject.dtos;
 
-public record FlightRecordDto(String origin, String destiny, int duration, int seats) {
+import java.util.Set;
+
+public record FlightRecordDto(Long id, String origin, String destiny, int duration, int seats, Set<String> passengerName) {
 }

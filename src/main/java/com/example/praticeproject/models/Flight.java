@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -27,5 +29,10 @@ public class Flight implements Serializable {
     private int seats;
 
     @ManyToMany
+    @JoinTable(
+        name = "flight_passenger",
+        joinColumns = @JoinColumn(name = "flight_id"),
+        inverseJoinColumns = @JoinColumn(name = "passenger_id")
+    )
     private Set<Passenger> passengers;
 }

@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.praticeproject.dtos.FlightRecordDto;
 import com.example.praticeproject.models.Flight;
 import com.example.praticeproject.models.Passenger;
 import com.example.praticeproject.services.FlightService;
+import com.example.praticeproject.services.PassengerService;
 
 @Controller
 @RequestMapping("/flights")
@@ -25,15 +27,20 @@ public class FlightController {
     @Autowired
     private FlightService flightService;
 
+    @Autowired
+    private PassengerService passengerService;
+
     @GetMapping
-    public ResponseEntity<List<Flight>> getAllFlights() {
-        List<Flight> flights = flightService.getAllFlights();
+    public ResponseEntity<List<FlightRecordDto>> getAllFlights() {
+        List<FlightRecordDto> flights = flightService.getAllFlights();
+        System.out.println(flights);
         return ResponseEntity.ok(flights);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Flight> getFlightById(@PathVariable Long id) {
-        Optional<Flight> flight = flightService.getFlightById(id);
+    public ResponseEntity<FlightRecordDto> getFlightById(@PathVariable Long id) {
+        Optional<FlightRecordDto> flight = flightService.getFlightById(id);
+        System.out.println(flight);
         return flight.map(value -> ResponseEntity.ok().body(value))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -50,20 +57,19 @@ public class FlightController {
         return ResponseEntity.status(HttpStatus.OK).body("Flight deleted");
     }
     
-    @PostMapping("/{id}")
-    public ResponseEntity<Flight> addPassengerToFlight(@PathVariable Long id, @RequestBody Passenger passenger) {
-        Optional<Flight> optionalFlight = flightService.getFlightById(id);
-        if (optionalFlight.isPresent()) {
-            Flight flight = optionalFlight.get();
+    @PostMapping("/{flightId}/passengers/{passengerId}")
+    public ResponseEntity<Object> addPassengerToFlight(@PathVariable Long flightId, @PathVariable Long passengerId) {
+        Optional<Flight> optionalFlight = flightService.getFlightObjectById(flightId);
+        Optional<Passenger> optionalPassenger = passengerService.getPassengerById(passengerId);
 
-            Set<Passenger> passengers = flight.getPassengers();
-            passengers.add(passenger);
-            flight.setPassengers(passengers);
-            Flight updatedFlight = flightService.saveFlight(flight);
-            return ResponseEntity.ok(updatedFlight);
-        } else {
-            return ResponseEntity.notFound().build();
+        if (optionalFlight != null && optionalPassenger != null) {
+            Flight flight = optionalFlight.get();
+            Passenger passenger = optionalPassenger.get();
+            flight.getPassengers().add(passenger);
+            flightService.saveFlight(flight);
         }
+
+        return ResponseEntity.ok().body("Passenger added");
 
     }
 }
