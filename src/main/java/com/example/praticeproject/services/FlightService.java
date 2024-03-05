@@ -1,10 +1,8 @@
 package com.example.praticeproject.services;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.praticeproject.dtos.FlightRecordDto;
+import com.example.praticeproject.dtos.SimplifiedPassengerDto;
 import com.example.praticeproject.models.Flight;
-import com.example.praticeproject.models.Passenger;
 import com.example.praticeproject.repositories.FlightRepository;
 
 @Service
@@ -46,10 +44,14 @@ public class FlightService {
     }
 
     private FlightRecordDto convertToDto(Flight flight) {
-        Set<String> passengerNames = flight.getPassengers().stream()
-                                                .map(Passenger::getName)
-                                                .collect(Collectors.toSet());
-        FlightRecordDto dto = new FlightRecordDto(flight.getId(), flight.getOrigin(), flight.getDestiny(), flight.getDuration(), flight.getSeats(), passengerNames);
+        Set<SimplifiedPassengerDto> passengerRecordDtos = flight.getPassengers().stream()
+                .map(passenger -> {
+                    SimplifiedPassengerDto passengerDto = new SimplifiedPassengerDto(passenger.getId(), passenger.getName());
+                    return passengerDto;
+                })
+                .collect(Collectors.toSet());
+
+        FlightRecordDto dto = new FlightRecordDto(flight.getId(), flight.getOrigin(), flight.getDestiny(), flight.getDuration(), flight.getSeats(), passengerRecordDtos);
         return dto;
     }
 }

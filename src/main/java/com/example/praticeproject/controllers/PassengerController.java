@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.praticeproject.dtos.PassengerRecordDto;
 import com.example.praticeproject.models.Passenger;
 import com.example.praticeproject.services.PassengerService;
 
@@ -24,14 +25,14 @@ public class PassengerController {
     private PassengerService passengerService;
 
     @GetMapping
-    public ResponseEntity<List<Passenger>> getAllPassengers() {
-        List<Passenger> passengers = passengerService.getAllPassengers();
+    public ResponseEntity<List<PassengerRecordDto>> getAllPassengers() {
+        List<PassengerRecordDto> passengers = passengerService.getAllPassengers();
         return ResponseEntity.ok(passengers);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Passenger> getPassengerById(@PathVariable Long id) {
-        Optional<Passenger> passenger = passengerService.getPassengerById(id);
+    public ResponseEntity<PassengerRecordDto> getPassengerById(@PathVariable Long id) {
+        Optional<PassengerRecordDto> passenger = passengerService.getPassengerById(id);
         return passenger.map(value -> ResponseEntity.ok().body(value))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

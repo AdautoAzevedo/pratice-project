@@ -60,7 +60,7 @@ public class FlightController {
     @PostMapping("/{flightId}/passengers/{passengerId}")
     public ResponseEntity<Object> addPassengerToFlight(@PathVariable Long flightId, @PathVariable Long passengerId) {
         Optional<Flight> optionalFlight = flightService.getFlightObjectById(flightId);
-        Optional<Passenger> optionalPassenger = passengerService.getPassengerById(passengerId);
+        Optional<Passenger> optionalPassenger = passengerService.getPassengerObjectById(passengerId);
 
         if (optionalFlight != null && optionalPassenger != null) {
             Flight flight = optionalFlight.get();
