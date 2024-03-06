@@ -2,7 +2,6 @@ package com.example.praticeproject.controllers;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,18 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.praticeproject.dtos.FlightRecordDto;
 import com.example.praticeproject.models.Flight;
-import com.example.praticeproject.models.Passenger;
 import com.example.praticeproject.services.FlightService;
-import com.example.praticeproject.services.PassengerService;
 
 @Controller
 @RequestMapping("/flights")
 public class FlightController {
     @Autowired
     private FlightService flightService;
-
-    @Autowired
-    private PassengerService passengerService;
 
     @GetMapping
     public ResponseEntity<List<FlightRecordDto>> getAllFlights() {
@@ -40,7 +34,6 @@ public class FlightController {
     @GetMapping("/{id}")
     public ResponseEntity<FlightRecordDto> getFlightById(@PathVariable Long id) {
         Optional<FlightRecordDto> flight = flightService.getFlightById(id);
-        System.out.println(flight);
         return flight.map(value -> ResponseEntity.ok().body(value))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -59,17 +52,6 @@ public class FlightController {
     
     @PostMapping("/{flightId}/passengers/{passengerId}")
     public ResponseEntity<Object> addPassengerToFlight(@PathVariable Long flightId, @PathVariable Long passengerId) {
-        Optional<Flight> optionalFlight = flightService.getFlightObjectById(flightId);
-        Optional<Passenger> optionalPassenger = passengerService.getPassengerObjectById(passengerId);
-
-        if (optionalFlight != null && optionalPassenger != null) {
-            Flight flight = optionalFlight.get();
-            Passenger passenger = optionalPassenger.get();
-            flight.getPassengers().add(passenger);
-            flightService.saveFlight(flight);
-        }
-
-        return ResponseEntity.ok().body("Passenger added");
-
+        return flightService.addPassengerToFlight(flightId, passengerId);
     }
 }
