@@ -10,8 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.praticeproject.dtos.FlightReceivedDto;
 import com.example.praticeproject.dtos.FlightRecordDto;
 import com.example.praticeproject.dtos.SimplifiedPassengerDto;
+import com.example.praticeproject.models.Airport;
 import com.example.praticeproject.models.Flight;
 import com.example.praticeproject.models.Passenger;
 import com.example.praticeproject.repositories.FlightRepository;
@@ -25,7 +27,17 @@ public class FlightService {
     @Autowired
     private PassengerService passengerService;
 
-    public Flight saveFlight(Flight flight) {
+    @Autowired
+    private AirportService airportService;
+
+    public Flight saveFlight(FlightReceivedDto flightReceivedDto) {
+        Airport origin = airportService.getAirportById(flightReceivedDto.origin()).getBody();
+        Airport destination = airportService.getAirportById(flightReceivedDto.destination()).getBody();
+        Flight flight = new Flight();
+        flight.setSeats(flightReceivedDto.seats());
+        flight.setDuration(flightReceivedDto.duration());
+        flight.setOrigin(origin);
+        flight.setDestination(destination);
         return flightRepository.save(flight);
     }
 
@@ -77,7 +89,7 @@ public class FlightService {
                 })
                 .collect(Collectors.toSet());
 
-        FlightRecordDto dto = new FlightRecordDto(flight.getId(), flight.getOrigin(), flight.getDestiny(), flight.getDuration(), flight.getSeats(), passengerRecordDtos);
+        FlightRecordDto dto = new FlightRecordDto(flight.getId(), flight.getOrigin().getName(), flight.getDestination().getName(), flight.getDuration(), flight.getSeats(), passengerRecordDtos);
         return dto;
     }
 }

@@ -44,7 +44,7 @@ public class PassengerService {
 
     private PassengerRecordDto convertToDto(Passenger passenger) {
         Set<SimplifiedFlightDto> simplifiedFlightDtos = passenger.getFlights().stream()
-                .map(flight -> new SimplifiedFlightDto(flight.getId(), flight.getOrigin(), flight.getDestiny()))
+                .map(flight -> new SimplifiedFlightDto(flight.getId(), flight.getOrigin().getName(), flight.getDestination().getName()))
                 .collect(Collectors.toSet());
 
         return new PassengerRecordDto(passenger.getId(), passenger.getName(), simplifiedFlightDtos);

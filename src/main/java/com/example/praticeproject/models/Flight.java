@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,8 +24,14 @@ public class Flight implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String origin;
-    private String destiny;
+    @ManyToOne
+    @JoinColumn(name = "origin")
+    private Airport origin;
+
+    @ManyToOne
+    @JoinColumn(name = "destination")
+    private Airport destination;
+    
     private int duration;
     private int seats;
 

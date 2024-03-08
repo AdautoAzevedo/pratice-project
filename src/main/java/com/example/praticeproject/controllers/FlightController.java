@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.praticeproject.dtos.FlightReceivedDto;
 import com.example.praticeproject.dtos.FlightRecordDto;
 import com.example.praticeproject.models.Flight;
 import com.example.praticeproject.services.FlightService;
@@ -39,8 +40,8 @@ public class FlightController {
     }
 
     @PostMapping
-    public ResponseEntity<Flight> saveFlight(@RequestBody Flight flight) {
-        Flight savedFlight = flightService.saveFlight(flight);
+    public ResponseEntity<Flight> saveFlight(@RequestBody FlightReceivedDto flightReceivedDto) {
+        Flight savedFlight = flightService.saveFlight(flightReceivedDto);
         return ResponseEntity.ok().body(savedFlight);
     }
 
