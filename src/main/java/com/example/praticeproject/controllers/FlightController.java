@@ -55,4 +55,8 @@ public class FlightController {
     public ResponseEntity<Object> addPassengerToFlight(@PathVariable Long flightId, @PathVariable Long passengerId) {
         return flightService.addPassengerToFlight(flightId, passengerId);
     }
+    @GetMapping("/byAirport/{airportId}")
+    public ResponseEntity<List<Flight>> getFlightsByAirport(@PathVariable Long airportId) {
+        return flightService.getFlightsByAirport(airportId);
+    }
 }

@@ -81,6 +81,12 @@ public class FlightService {
         }
     }
 
+    public ResponseEntity<List<Flight>> getFlightsByAirport(Long airportId) {
+        Airport airport = airportService.getAirportById(airportId).getBody();
+        List<Flight> flights = flightRepository.findByOrigin(airport);
+        return ResponseEntity.ok().body(flights);
+    }
+
     private FlightRecordDto convertToDto(Flight flight) {
         Set<SimplifiedPassengerDto> passengerRecordDtos = flight.getPassengers().stream()
                 .map(passenger -> {
