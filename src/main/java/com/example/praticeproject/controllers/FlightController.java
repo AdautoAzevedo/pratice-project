@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.praticeproject.dtos.AirportFlightsDto;
 import com.example.praticeproject.dtos.FlightReceivedDto;
 import com.example.praticeproject.dtos.FlightRecordDto;
 import com.example.praticeproject.models.Flight;
@@ -56,7 +57,7 @@ public class FlightController {
         return flightService.addPassengerToFlight(flightId, passengerId);
     }
     @GetMapping("/byAirport/{airportId}")
-    public ResponseEntity<List<Flight>> getFlightsByAirport(@PathVariable Long airportId) {
+    public ResponseEntity<AirportFlightsDto> getFlightsByAirport(@PathVariable Long airportId) {
         return flightService.getFlightsByAirport(airportId);
     }
 }

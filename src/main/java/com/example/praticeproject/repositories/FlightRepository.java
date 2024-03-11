@@ -11,4 +11,5 @@ import com.example.praticeproject.models.Flight;
 @Repository
 public interface FlightRepository extends JpaRepository<Flight, Long>{
     List<Flight> findByOrigin(Airport origin);
+    List<Flight> findByDestination(Airport destination);
 }
