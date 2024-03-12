@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +13,13 @@ import com.example.praticeproject.repositories.AirportRepository;
 
 @Service
 public class AirportService {
+    
+    private final AirportRepository airportRepository;
+
     @Autowired
-    private AirportRepository airportRepository;
+    public AirportService(AirportRepository airportRepository) {
+        this.airportRepository = airportRepository;
+    }
 
     public ResponseEntity<Airport> registerAirport(Airport airport) {
         Airport savedAirport = airportRepository.save(airport);
@@ -32,7 +38,11 @@ public class AirportService {
     }
 
     public ResponseEntity<Object> deleteAirport(Long id) {
-        airportRepository.deleteById(id);
-        return ResponseEntity.ok().body("Airport deleted");
+        try {
+            airportRepository.deleteById(id);
+            return ResponseEntity.ok().body("Airport deleted");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting airport");
+        }
     }
 }

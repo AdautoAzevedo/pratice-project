@@ -17,8 +17,14 @@ import com.example.praticeproject.repositories.PassengerRepository;
 @Service
 @Transactional
 public class PassengerService {
-    @Autowired
+
     private PassengerRepository passengerRepository;
+
+    @Autowired
+    public PassengerService(PassengerRepository passengerRepository) {
+        this.passengerRepository = passengerRepository;
+    }
+
 
     public Passenger savePassenger(Passenger passenger) {
         return passengerRepository.save(passenger);

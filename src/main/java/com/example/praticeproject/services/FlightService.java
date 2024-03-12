@@ -23,14 +23,19 @@ import com.example.praticeproject.repositories.FlightRepository;
 @Service
 @Transactional
 public class FlightService {
-    @Autowired
-    private FlightRepository flightRepository;
+    
+    private final FlightRepository flightRepository;
+    
+    private final PassengerService passengerService;
+    
+    private final AirportService airportService;
 
     @Autowired
-    private PassengerService passengerService;
-
-    @Autowired
-    private AirportService airportService;
+    public FlightService(FlightRepository flightRepository, PassengerService passengerService, AirportService airportService) {
+        this.flightRepository = flightRepository;
+        this.passengerService = passengerService;
+        this.airportService = airportService;
+    }
 
     public Flight saveFlight(FlightReceivedDto flightReceivedDto) {
         Airport origin = airportService.getAirportById(flightReceivedDto.origin()).getBody();
