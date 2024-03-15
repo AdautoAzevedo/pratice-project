@@ -10,10 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.praticeproject.dtos.AirportFlightsDto;
 import com.example.praticeproject.dtos.FlightReceivedDto;
 import com.example.praticeproject.dtos.FlightRecordDto;
-import com.example.praticeproject.dtos.SimplifiedFlightDto;
 import com.example.praticeproject.dtos.SimplifiedPassengerDto;
 import com.example.praticeproject.models.Airport;
 import com.example.praticeproject.models.Flight;
@@ -86,29 +84,6 @@ public class FlightService {
         } else {
             return ResponseEntity.notFound().build();
         }
-    }
-
-    public ResponseEntity<AirportFlightsDto> getFlightsByAirport(Long airportId) {
-        Airport airport = airportService.getAirportById(airportId).getBody();
-        List<Flight> departures = flightRepository.findByOrigin(airport);
-        List<Flight> arrivals = flightRepository.findByDestination(airport);
-
-        List<SimplifiedFlightDto> arrivalsDto = mapFlightsToDto(arrivals);
-        List<SimplifiedFlightDto> departuresDto = mapFlightsToDto(departures);
-
-        AirportFlightsDto flights = new AirportFlightsDto(airport.getName(), arrivalsDto, departuresDto);
-        
-        return ResponseEntity.ok().body(flights);
-    }
-
-    private List<SimplifiedFlightDto> mapFlightsToDto(List<Flight> flights) {
-        return flights.stream()
-                .map(this::simplifyFlight)
-                .collect(Collectors.toList());
-    }
-
-    private SimplifiedFlightDto simplifyFlight(Flight flight) {
-        return new SimplifiedFlightDto(flight.getId(), flight.getOrigin().getName(), flight.getDestination().getName());
     }
 
     private FlightRecordDto convertToDto(Flight flight) {

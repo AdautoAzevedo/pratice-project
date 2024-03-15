@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.praticeproject.dtos.AirportFlightsDto;
 import com.example.praticeproject.models.Airport;
 import com.example.praticeproject.services.AirportService;
 
@@ -39,5 +40,10 @@ public class AirportController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteAirport(@PathVariable Long id) {
         return airportService.deleteAirport(id);
+    }
+
+    @GetMapping("/flights/{airportId}")
+    public ResponseEntity<AirportFlightsDto> getFlightByAirport(@PathVariable Long airportId) {
+        return airportService.getFlightsByAirport(airportId);
     }
 }
