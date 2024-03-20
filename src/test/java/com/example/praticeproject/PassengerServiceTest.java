@@ -2,6 +2,7 @@ package com.example.praticeproject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -75,5 +76,14 @@ public class PassengerServiceTest {
 
         assertTrue(receivedPassenger.isPresent());
         assertEquals(passenger.getId(), receivedPassenger.get().id());
+    }
+
+    @Test
+    public void testDeletePassengerRecord() {
+        Long id = 1L;
+        doNothing().when(passengerRepository).deleteById(id);
+        passengerService.deletePassengerRecord(id);
+        verify(passengerRepository, times(1)).deleteById(id);
+
     }
 }
