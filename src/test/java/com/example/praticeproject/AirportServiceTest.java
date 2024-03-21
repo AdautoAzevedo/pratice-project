@@ -3,6 +3,9 @@ package com.example.praticeproject;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -61,5 +64,13 @@ public class AirportServiceTest {
         ResponseEntity<Airport> receivedAirport = airportService.getAirportById(1L);
         assertNotNull(receivedAirport);
         assertEquals(airport, receivedAirport.getBody());
-    }   
+    }
+
+    @Test
+    public void testDeleteAirport() {
+        Long id = 1L;
+        doNothing().when(airportRepository).deleteById(id);
+        airportService.deleteAirport(id);
+        verify(airportRepository, times(1)).deleteById(id);
+    }
 }

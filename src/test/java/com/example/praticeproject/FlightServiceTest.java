@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -47,7 +48,6 @@ public class FlightServiceTest {
 
     @Test
     public void testSaveFlight() {
-
         FlightReceivedDto flightReceivedDto = new FlightReceivedDto(1L, 2L, 30, 120);
         Airport origin = new Airport();
         origin.setId(1L);
@@ -83,7 +83,6 @@ public class FlightServiceTest {
         List<FlightRecordDto> flightsList = flightService.getAllFlights();
 
         assertEquals(2, flightsList.size());
-
     }
 
     @Test
@@ -143,5 +142,13 @@ public class FlightServiceTest {
 
         assertEquals("Flight is full. Cannot add passenger", responseEntity.getBody());
         verify(flightRepository, times(0)).save(any(Flight.class));
+    }
+
+    @Test
+    public void testDeleteFlightRecord() {
+        Long id = 1L;
+        doNothing().when(flightRepository).deleteById(id);
+        flightService.deleteFlightRecord(id);
+        verify(flightRepository, times(1)).deleteById(id);
     }
 }

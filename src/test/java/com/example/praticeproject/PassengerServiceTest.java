@@ -84,6 +84,5 @@ public class PassengerServiceTest {
         doNothing().when(passengerRepository).deleteById(id);
         passengerService.deletePassengerRecord(id);
         verify(passengerRepository, times(1)).deleteById(id);
-
     }
 }
